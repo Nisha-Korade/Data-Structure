@@ -1,0 +1,258 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+	int data;
+	struct node *next,*prev;
+}node;
+
+node *create(int n)
+{
+	node *p,*h=NULL,*q;
+	int i;
+	q=(node *)malloc(sizeof(node));
+	printf("Enter the data=");
+	scanf("%d",&(q->data));
+	q=h;
+	for(i=0;i<n;i++)
+	{
+		q=(node *)malloc(sizeof(node));
+		printf("Enter the data=");
+		scanf("%d",&(q->data));
+		q->next=q->prev=NULL;
+		if(h==NULL)
+			p=h=q;
+		else
+		{
+			p->next=q;
+			q->prev=p;
+			p=q;
+		}
+	}
+	p->next=h;
+	h->prev=p;
+	return h;
+}
+
+void print(node *h)
+{
+	node *p=h;
+	while(p->next!=h)
+	{
+		printf(" %d ",p->data);
+		p=p->next;
+	}
+	printf(" %d ",p->data);
+}
+
+node *insert_front(node *h)
+{
+	node *p,*q=h;
+	p=(node *)malloc(sizeof(node));
+	printf("Enter the data=");
+	scanf("%d",&p->data);
+	p->next=p;
+	if(h==NULL)
+	{
+		h=p;
+		p->next=h;
+	}
+	else
+	{
+		while(q->next!=h)
+			q=q->next;
+		q->next=p;
+		p->next=h;
+		h=p;
+	}
+	return h;
+}
+
+node *insert_end(node *h)
+{
+	node *p,*q=h;
+	p=(node *)malloc(sizeof(node));
+	printf("Enter the data=");
+	scanf("%d",&p->data);
+	p->next=p;
+	if(h==NULL)
+	{
+		h=p;
+		p->next=p;
+	}
+	else
+	{
+		while(q->next!=h)
+			q=q->next;
+		q->next=p;
+		p->next=h;
+	}
+	return h;
+}
+
+node *insert_middle(node *h,int pos)
+{
+	node *p,*q=h,*r;
+	int i;
+	p=(node *)malloc(sizeof(node));
+	printf("Enter the data=");
+	scanf("%d",&p->data);
+	p->next=p;
+	if(pos==1)
+	{
+		while(q->next!=h)
+			q=q->next;
+		q->next=p;
+		p->next=h;
+		h=p;
+	}
+	else
+	{
+		for(i=1;i<pos-1;i++)
+			q=q->next;
+		p->next=q->next;
+		q->next=p;
+
+	}
+	return h;
+}
+
+node *delete_front(node *h) 
+{
+	node *p,*q;
+	p=h;
+	q=h;
+	if(h->next==h)
+	{
+		free(h);
+		h=NULL;
+	}
+	else
+	{
+		while(p->next!=h)
+			p=p->next;
+		h=h->next;
+		p->next=h;
+		q->next=NULL;
+		free(q);	
+	}
+	return h;
+}
+
+node* delete_end(node *h) 
+{
+	node *p=h,*q;
+	if(h->next==h)
+	{
+		free(h);
+		h=NULL;
+	}
+	else
+	{
+		while(p->next->next!=h)
+			p=p->next;
+		q=p->next;
+		p->next=h;
+		q->next=NULL;
+		free(q);
+	}
+	return h;
+}
+
+node* delete_middle(node *h,int pos) 
+{
+	node *q=h,*p=h;
+	int i;
+	if(pos==1)
+	{
+		if(h->next==h)
+		{
+			free(h);
+			h=NULL;
+		}
+		else
+		{
+			while(q->next!=h)
+				q=q->next;
+			h=h->next;
+			q->next=h;
+			free(p);
+			p=NULL;
+		}
+	}
+	else
+	{
+		for(i=1;i<pos-1;i++)
+			q=q->next;
+		p=q->next;
+		q->next=p->next;
+		p->next=NULL;
+		free(p);
+	}
+	return h;
+}
+
+int main()
+{
+	int ch,n,s,pos;
+	node *h,*f,*m,*e,*df,*dm,*de;
+	printf("How many node you want=");
+	scanf("%d",&n);
+	while(1)
+	{
+		printf("\n----------- MENU -----------\n");
+		printf("\t1) Create\n\t2) Print\n\t3) insert front\n\t4) insert end\n\t5) insert middle\n\t6) delete front\n\t7) delete end\n\t8) delete middle\n\t9) Exit\n");
+		printf("Enter your choice=");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:
+				h=create(n);
+				break;
+				
+			case 2:
+				print(h);
+				break;
+				
+			case 3:
+				f=insert_front(h);
+				print(f);
+				break;
+				
+			case 4:
+				m=insert_end(h);
+				print(m);
+				break;
+				
+			case 5:
+				printf("Enter position=");
+				scanf("%d",&pos);
+				e=insert_middle(h,pos);
+				print(e);
+				break;
+				
+			case 6:
+				df=delete_front(h);
+				print(df);
+				break;
+				
+			case 7:
+				de=delete_end(h);
+				print(de);
+				break;
+			case 8:
+				printf("Enter position=");
+				scanf("%d",&pos);
+				dm=delete_middle(h,pos);
+				print(dm);		
+				break;
+				
+			case 9:
+				exit(0);
+				break;
+				
+			default:
+				printf("Enter valid case\n");
+		}
+	}
+}
